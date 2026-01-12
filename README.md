@@ -138,23 +138,36 @@ HAVING num_items > 12) AS num_orders
 ```
 **NOTE: The goal here was to explore the order_details table**
 
-Data Analysis
-Objective 3: Analyze Customer Behavior
+### Data Analysis
+
+
+**Objective 3: Analyze Customer Behavior**
+
 To gain deeper insights, the menu_items and order_details tables were combined.
 Key analyses performed:
+
+```sql
 1. Combine the menu_items and order details tables into a single table. 
 SELECT *
 FROM order_details AS o
 LEFT JOIN menu_items AS m
            ON o. item_id = m.menu_item_id;
-2. What were the least and most ordered items? What categories were they in? 
+```
+
+2. What were the least and most ordered items? What categories were they in?
+
+```sql
 SELECT item_name, COUNT(order_details_id) AS num_purchases
 FROM order_details AS o
 LEFT JOIN menu_items AS m
          ON o.item_id = m.menu_item_id
 GROUP BY item_name
-ORDER BY num_purchase; 
-3. What were the top 5 orders that spent the most money? 
+ORDER BY num_purchase;
+```
+
+3. What were the top 5 orders that spent the most money?
+
+```sql
 SELECT order_id, SUM(price) AS total_spend
 FROM order_details AS o
 LEFT JOIN menu_items AS m
@@ -162,19 +175,52 @@ LEFT JOIN menu_items AS m
 GROUP BY order_id
 ORDER BY total_spend DESC
 LIMIT 5;
-4.  View the details of the highest spend order. What insights can you gather from here 
+```
+
+4.  View the details of the highest spend order. What insights can you gather from here
+
+```sql
 SELECT category, COUNT(item_id) AS num_items
 FROM order_details AS o
 LEFT JOIN menu_items AS m
           ON o.item_id = m.menu_item_id
 WHERE order_id = 440
 GROUP BY category;
+```
+
 Note: The insights gathered here is that we should keep this expensive Italian food in order_menu because people seem to order them a lot. 
-5. View the details of the top 5 highest spend orders. What insight can you gather from the top 5 highest spend orders. 
+
+6. View the details of the top 5 highest spend orders. What insight can you gather from the top 5 highest spend orders. 
+
+```sql
 SELECT order_id, category, COUNT(item_id) AS num_items
 FROM order_details AS o
 LEFT JOIN menu_items AS m
           ON o.item_id = m.menu_item_id
 WHERE order_id IN (440, 2075, 1957, 330, 2675) 
 GROUP BY order_id, category;
+```
 
+### Results and Findings
+
+- Italian dishes appeared frequently among the most expensive and most ordered items.
+
+- A small number of orders accounted for significantly higher spending.
+
+- High value orders often contained multiple items from the same category, especially Italian cuisine.
+
+- Customers showed a strong preference for premium menu items rather than low cost alternatives.
+
+- Orders with many items tended to drive higher total revenue per transaction.
+
+### Recommendations
+
+- Retain and promote high performing Italian dishes, as they contribute significantly to revenue.
+
+- Consider bundle offers or promotions around popular categories to increase order value.
+
+- Analyze peak order dates further to optimize staffing and inventory planning.
+
+- Introduce loyalty rewards for high spending customers to encourage repeat purchases.
+
+- Use customer ordering trends to guide future menu updates and pricing strategies.
